@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
+import { View, Text, TextInput, Button, Alert, FlatList, SafeAreaView } from "react-native";
 import db from "./database";
 
 type Pedido = {
@@ -37,8 +37,8 @@ export default function Pedidos() {
   }, []);
 
   const excluirPedido = async (id: number) => {
-  await db.runAsync("DELETE FROM pedidos WHERE id = ?", [id]);
-  carregarPedidos();
+    await db.runAsync("DELETE FROM pedidos WHERE id = ?", [id]);
+    carregarPedidos();
   };
 
   const carregarPedidos = async () => {
@@ -67,7 +67,7 @@ export default function Pedidos() {
   };
 
   return (
-    <View style={{ padding: 16 }}>
+    <SafeAreaView style={{ flex: 1, padding: 16 }}>
       <TextInput
         style={{ borderWidth: 1, marginBottom: 8, padding: 8 }}
         placeholder="Nome do cliente"
@@ -100,31 +100,33 @@ export default function Pedidos() {
       />
       <Button title="Salvar Pedido" onPress={salvarPedido} />
 
+      {/* FlatList com scroll */}
       <FlatList
+        style={{ marginTop: 16, flex: 1 }}
         data={pedidos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View
-              style={{
+            style={{
               borderBottomWidth: 1,
               borderBottomColor: "#ccc",
               paddingVertical: 8,
             }}
-    >
-      <Text>Nome: {item.nome}</Text>
-      <Text>Valor: {item.valor}</Text>
-      <Text>Quantidade: {item.quantidade}</Text>
-      <Text>Deve: {item.deve}</Text>
-      <Text>Data: {item.data}</Text>
+          >
+            <Text>Nome: {item.nome}</Text>
+            <Text>Valor: {item.valor}</Text>
+            <Text>Quantidade: {item.quantidade}</Text>
+            <Text>Deve: {item.deve}</Text>
+            <Text>Data: {item.data}</Text>
 
-      <Button
-        title="Excluir"
-        color="red"
-        onPress={() => excluirPedido(item.id)}
-      />
-    </View>
+            <Button
+              title="Excluir"
+              color="red"
+              onPress={() => excluirPedido(item.id)}
+            />
+          </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
