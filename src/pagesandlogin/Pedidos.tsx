@@ -100,7 +100,7 @@ export default function Pedidos() {
       />
       <Button title="Salvar Pedido" onPress={salvarPedido} />
 
-      {/* FlatList com scroll */}
+
       <FlatList
         style={{ marginTop: 16, flex: 1 }}
         data={pedidos}
